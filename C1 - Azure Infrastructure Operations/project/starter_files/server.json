@@ -1,18 +1,30 @@
 {
-	"variables": {
-		"client_id": "{{env `ARM_CLIENT_ID`}}",
-		"client_secret": "{{env `ARM_CLIENT_SECRET`}}",
-		"subscription_id": "{{env `ARM_SUBSCRIPTION_ID`}}"
+  "variables": {
+		 "subscription_id": "bc8b2b23-8c94-4248-a572-8b50f2f81d87"
 	},
-	"builders": [{
-		**YOUR CODE HERE**
-	}],
-	"provisioners": [{
+  "builders": [{
+    "type": "azure-arm",
+    "subscription_id": "{{user `subscription_id`}}",
+    "os_type": "Linux",
+    "image_publisher": "Canonical",
+    "image_offer": "UbuntuServer",
+    "image_sku": "18.04-LTS",
+   
+
+    "vm_size":"Standard_D2s_v3",
+
+"managed_image_name" : "udacity-vm",
+"managed_image_resource_group_name":"Azuredevops",
+ 
+    "build_resource_group_name": "Azuredevops"
+  }],
+ "provisioners": [{
 		"inline": [
 			"echo 'Hello, World!' > index.html",
 			"nohup busybox httpd -f -p 80 &"
 		],
 		"inline_shebang": "/bin/sh -x",
-		"type": "shell"
+		"type": "shell",
+ "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'"
 	}]
 }
